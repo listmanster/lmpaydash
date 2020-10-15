@@ -1,0 +1,29 @@
+{
+  "private": true,
+  "version": "1.0.0",
+  "name": "bunge-paysite",
+  "author": "Ashok Hariharan",
+  "scripts": {
+    "dev": "gatsby develop",
+    "build": "gatsby build"
+  },
+  "dependencies": {
+    "@reach/dialog": "^0.11.2",
+    "@reach/tabs": "^0.11.2",
+    "@reach/visually-hidden": "^0.11.1",
+    "axios": "^0.20.0",
+    "gatsby": "^2.24.77",
+    "gatsby-plugin-postcss": "^3.0.3",
+    "gatsby-plugin-purgecss": "^5.0.0",
+    "gatsby-plugin-react-helmet": "^3.3.14",
+    "postcss": "^8.1.1",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
+    "react-helmet": "^6.1.0",
+    "react-netlify-identity": "^0.2.5",
+    "react-netlify-identity-widget": "^0.2.7"
+  },
+  "devDependencies": {
+    "tailwindcss": "^1.9.2"
+  }
+}
