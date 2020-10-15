@@ -1,16 +1,16 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { navigate } from 'gatsby';
-import { useIdentityContext } from 'react-netlify-identity-widget';
+import {IdentityContext} from '../../identity-context';
+
 
 const PrivateRoute = ({ component: Component, location, ...rest }) => {
   
-  const identity = useIdentityContext();
+  const {user} = useContext(IdentityContext);
+  const isLoggedIn = !!user;
 
-  if (
-    (!identity || !identity.isLoggedIn) &&
-    location.pathname !== '/login'
-  ) {
-    navigate('/login', { replace: true });
+  console.log( " PRIVATE ROUTE == ", user, isLoggedIn);
+
+  if ( !isLoggedIn && location.pathname !== '/app/login') {
     return null;
   }
 

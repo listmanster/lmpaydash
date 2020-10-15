@@ -1,3 +1,6 @@
+const React = require("react");
+const wrapRootElement = require("./wrap-root-element");
+
 
 exports.onRenderBody = ({setBodyAttributes}, pluginOptions) => {
     const BodyAttributes = {
@@ -5,3 +8,7 @@ exports.onRenderBody = ({setBodyAttributes}, pluginOptions) => {
     }
     setBodyAttributes(BodyAttributes)
 };
+
+
+exports.wrapRootElement = wrapRootElement;
+

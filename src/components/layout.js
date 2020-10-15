@@ -4,7 +4,6 @@ import { Router } from '@reach/router'
 
 import Header from './header';
 import Footer from './footer';
-//import { IdentityContextProvider } from 'react-netlify-identity';
 
 
 export const MainBody = ({children, title}) => {
@@ -29,7 +28,7 @@ export const Layout = ({children}) => {
     return (
         <>
         <Router>
-           {/*  <Header path="*" toggleMenu={toggleMenu} menuVisible={menuVisible} /> */}
+           <Header path="*" toggleMenu={toggleMenu} menuVisible={menuVisible} />
         </Router>
         <main>{children}</main>
         <Footer />

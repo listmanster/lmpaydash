@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import { Router } from '@reach/router';
+import {IdentityContext} from '../../identity-context';
 import { Link, navigate } from 'gatsby';
 
 /* import {useIdentityContext} from 'react-netlify-identity';
@@ -29,7 +30,9 @@ const Header = ({toggleMenu, menuVisible}) => {
     const loggedInName = isLoggedIn?  authName(identity): "";
   */
 
-  const isLoggedIn = false;
+  const {user, identity: netlifyIdentity} = useContext(IdentityContext);
+
+  const isLoggedIn = !!user; 
   
     return (
     <nav id="header" className="w-full z-30 top-0 text-white py-1 lg:py-2 shadow-md">
@@ -60,7 +63,7 @@ const Header = ({toggleMenu, menuVisible}) => {
                             <Link className="inline-block py-2 px-4 text-black font-bold no-underline" to="/profile">Profile</Link>
                             </li>
                             <li className="mr-3">
-                                <Link className="inline-block text-black no-underline hover:text-gray-800 hover:text-underline py-2 px-4" to="/logout">Logout</Link>
+                                <Link className="inline-block text-black no-underline hover:text-gray-800 hover:text-underline py-2 px-4" to="/app" onClick={() => netlifyIdentity.logout()}>Logout {user.user_metadata.full_name}</Link>
                             </li>
                         </ul>
                     </div>
