@@ -9,9 +9,6 @@ import Home from '../components/home';
 //import PrivateRoute from '../components/private-route';
 import {Login, SignUp} from '../components/login';
 
-netlifyIdentity.init({});
-
-
 
 export default () => {
 
