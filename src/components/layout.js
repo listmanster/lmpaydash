@@ -6,10 +6,21 @@ import Header from './header';
 import Footer from './footer';
 
 
+
 export const MainBody = ({children, title}) => {
     return (
         <div className="text-center px-3 lg:px-0">
             <h1 className="my-4 text-2xl md:text-3xl lg:text-5xl font-black leading-tight">{title}</h1>
+            
+            {children}
+        </div>
+    )   ; 
+}
+
+export const DocsBody = ({children, title}) => {
+    return (
+        <div className="text-center px-3 lg:px-0">
+            <h1 className="my-4 text-xl md:text-2xl lg:text-3xl font-black leading-tight">{title}</h1>
             {children}
         </div>
     )   ; 

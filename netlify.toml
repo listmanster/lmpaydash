@@ -6,3 +6,10 @@
 
 [dev]
   framework = "gatsby"
+
+
+[[redirects]]
+  from = "/"
+  to = "/app"
+  status = 200
+  
