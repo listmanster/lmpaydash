@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import {Router, Link} from '@reach/router';
 import {Helmet} from 'react-helmet';
 
@@ -11,44 +11,57 @@ import Layout, { MainBody } from '../components/layout';
 
 
 const Login = () =>  {
-    const {user, identity: netlifyIdentity} = useContext(IdentityContext);
+    const { identity: netlifyIdentity} = useContext(IdentityContext);
     return (
-        <div>
-            <button onClick={() => netlifyIdentity.open("login")}>Log In</button>
-        </div>
+        <button className="mx-auto lg:mx-2 hover:underline bg-white text-gray-800 font-bold rounded my-6 py-4 px-8 shadow-lg" 
+            onClick={() => netlifyIdentity.open("login")}>Log In</button>
     );
 }
 
 
 const SignUp = () => {
-    const {user, identity: netlifyIdentity} = useContext(IdentityContext);
+    const {identity: netlifyIdentity} = useContext(IdentityContext);
     return (
-        <div>
-            <button onClick={() => netlifyIdentity.open("signup")}>Sign Up</button>
-        </div>
+        <button className="mx-auto lg:mx-2 hover:underline bg-white text-gray-800 font-bold rounded my-6 py-4 px-8 shadow-lg" 
+            onClick={() => netlifyIdentity.open("signup")}>Sign Up</button>
     );
 }
 
 const LoggedIn = () => {
     const {user, identity: netlifyIdentity} = useContext(IdentityContext);
+    const [token, setToken] = useState(false);
+
+    useEffect( () => {
+        const fetchToken = async () => {
+            const token = user ? await netlifyIdentity.currentUser().jwt(true): false;
+            setToken(token);
+        }
+        fetchToken();
+    }, []);
+    
+
     return (
         <div>
-            Logged in  as {user.user_metadata.full_name}
+            <p>Logged in  as {user.user_metadata.full_name}</p>
+            {
+            token && (
+                <p>Your key is: {token}  </p>
+            )
+            }
         </div>
     );
 }
 
 
 const LoggedOut = ({isLoggedIn}) => {
-    console.log(" LOGGED OUT === ", isLoggedIn);
     if (isLoggedIn) {
         return null;
     } else {
         return (
-            <>
-            <Login />
-            <SignUp />
-            </>
+            <div className="flex-wrap">
+                <Login />
+                <SignUp />
+            </div>
         );
     } 
 
