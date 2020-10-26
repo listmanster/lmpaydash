@@ -1,0 +1,15 @@
+type UserInfo {
+    authUser: String!
+    authEmail: String!
+    authToken: String
+    privateKey: String
+    publicKey: String
+    tokenDate: Time!
+    updated: Time!
+}
+
+
+type Query {
+    allUsers: [UserInfo!]!
+    findUserInfoByAuthUser (authUser: String!): [UserInfo!]!
+}

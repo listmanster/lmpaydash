@@ -77,7 +77,7 @@ exports.handler = async function(event, context) {
         return paramsReq;
     } else {
         const {document, outputFormats, name} = paramsReq;
-        const parsed = await parseDocument(document, name, outputFormats);
+        //const parsed = await parseDocument(document, name, outputFormats);
         return {
             statusCode: 200,
             body: JSON.stringify(paramsReq)
