@@ -1,16 +1,8 @@
 const jwtutils = require('./utils/jwtutils');
 const sendQuery = require('./utils/sendquery');
+const queries = require("./utils/queries");
 
-const GET_USER_INFO =`
-    query findUserInfo ($authUser: String!) {
-        findUserInfoByAuthUser(authUser: $authUser) {
-        data {
-            authUser
-            authEmail
-            authToken
-        }
-        }
-      }`
+const GET_USER_INFO = queries.GET_USER_INFO;
     ;
 
 
