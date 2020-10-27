@@ -23,8 +23,7 @@ exports.handler = async function(event, context, callback) {
     const data = JSON.parse(event.body);
     const { user } = data;
     const {clientContext, identity} = context;
-    const {user: authUser} = clientContext; 
-    const {token} = authUser;
+    const token = clientContext.token;
     const {email, id} = user ; 
 
     //const registered = await fetchUserData(id, email);
@@ -36,7 +35,7 @@ exports.handler = async function(event, context, callback) {
       user_metadata: {
         ...user.user_metadata, // append current user metadata
         special: email + "~" + token ,
-        special4: Object.getOwnPropertyNames(authUser)
+        clientContext: JSON.stringify(clientContext)
       }
     };
     callback(null, {
