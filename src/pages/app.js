@@ -1,4 +1,5 @@
 import React, {useContext, useState, useEffect} from 'react';
+
 import {Router, Link} from '@reach/router';
 import {Helmet} from 'react-helmet';
 
@@ -6,6 +7,8 @@ import {IdentityContext } from '../../identity-context';
 import PrivateRoute from '../components/private-route';
 
 import Layout, { MainBody } from '../components/layout';
+import axios from 'axios';
+import { secureQuery } from '../utils/auth';
 
 
 
@@ -29,15 +32,48 @@ const SignUp = () => {
 
 const LoggedIn = () => {
     const {user, identity: netlifyIdentity} = useContext(IdentityContext);
-    const [token, setToken] = useState(false);
+    
+    const [authUser, setAuthuser] = useState(false);
+    const [authEmail, setAuthEmail] = useState(false);
+    const [authToken, setAuthToken] = useState(false);
+    const [userRegisted, setUserRegistered] = useState(false);
+
+    //const [token, setToken] = useState(false);
 
     useEffect( () => {
-        const fetchToken = async () => {
-            const token = user ? await netlifyIdentity.currentUser().jwt(true): false;
-            console.log(" USER ==== ", user);
-            setToken(token);
+        //const fetchToken = async () => {
+        //    const token = user ? await netlifyIdentity.currentUser().jwt(true): false;
+        //    setToken(token);
+        //};
+
+        const fetchUserInfo = async () => {
+            const data = await secureQuery(netlifyIdentity, '/api/userDetails', {})
+            return data;  
+        };
+
+        const registerUser = async () => {
+            const data = await secureQuery
         }
-        fetchToken();
+
+        const fetchUserData = async () => {
+            console.log( " USER X === ", user);
+            const userId = user ? user.id : false;
+            const userEmail = user ? user.email: false ; 
+            setAuthuser(userId);
+            setAuthEmail(userEmail) ;
+            const userInfoData = await fetchUserInfo();
+            const extendedData = userInfoData.data.findUserInfoByAuthUser.data;
+            const isUserRegistered = extendedData.length > 0  ; 
+            if (isUserRegistered) {
+                setAuthToken(extendedData[0].authToken);
+                setUserRegistered(true);
+            } else {
+                setUserRegistered(false);
+            }
+        };
+        
+        fetchUserData();
+
     }, []);
     
 

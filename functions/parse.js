@@ -1,5 +1,6 @@
-const {parserInfo} = require("./utils/parserutils");
 
+const {parserInfo} = require("./utils/parserutils");
+require('dotenv').config();
 
 const requireParams = (event, context) => {
     
@@ -54,7 +55,7 @@ const VALID_OUTPUT_FORMATS = [
 
 
 const parseDocument = async (input, parserName, outputFormats) => {
-    const parser = require(`../parsers/${parserName}`);
+    const parser = require(`${process.env.PARSERBASE_PARSER_ROOT}/${parserName}`);
     let parserOutputFormats  = [];
     if (outputFormats) {
         var _passedOutputFormats = outputFormats.split(",");

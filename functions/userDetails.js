@@ -1,9 +1,9 @@
 const jwtutils = require('./utils/jwtutils');
 const sendQuery = require('./utils/sendquery');
 
-const GET_USER_INFO = `
-    query {
-        findUserInfoByAuthUser(authUser:$authUser) {
+const GET_USER_INFO =`
+    query findUserInfo ($authUser: String!) {
+        findUserInfoByAuthUser(authUser: $authUser) {
         data {
             authUser
             authEmail
@@ -17,21 +17,25 @@ const GET_USER_INFO = `
 exports.handler = async function(event, context) {
 
     //const paramsReq =  requireParams(event, context);
-    const {identity, user} = context.clientContext ;
-    const isLoggedIn = user && user.app_metadata && user.app_metadata.roles;
-    const roles = isLoggedIn ? user.app_metadata.roles : [];
+    const { user } = context.clientContext;
+    const isLoggedIn = user && user.app_metadata && user.app_metadata;
+    ///const roles = isLoggedIn ? user.app_metadata.roles : [];
 
-    if (!isLoggedIn || !roles.includes('admin')) {
+    console.log( " USER ", isLoggedIn, user);
+
+    if (!isLoggedIn /* || !roles.includes('admin') */) {
         return {
           statusCode: 401,
           body: 'Unauthorized',
         };
     }else {
-        //const {document, outputFormats, name} = paramsReq;
-        //const parsed = await parseDocument(document, name, outputFormats);
+
+        const { email, sub } = user; 
+        const authUser =  sub;
+        const userData = await sendQuery(GET_USER_INFO,  { authUser });
         return {
             statusCode: 200,
-            body: JSON.stringify(user)
+            body: JSON.stringify(userData)
         };
     }
     

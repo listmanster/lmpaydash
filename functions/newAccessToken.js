@@ -38,18 +38,16 @@ const CREATE_USER_INFO = `
 exports.handler = async function(event, context) {
 
     //const paramsReq =  requirexParams(event, context);
-    const {identity, user} = context.clientContext ;
-    const isLoggedIn = user && user.app_metadata && user.app_metadata.roles;
-    const roles = isLoggedIn ? user.app_metadata.roles : [];
+    const { user } = context.clientContext;
+    const isLoggedIn = user && user.app_metadata && user.app_metadata;
 
-    if (!isLoggedIn || !roles.includes('admin')) {
+    if (!isLoggedIn) {
         return {
           statusCode: 401,
           body: 'Unauthorized',
         };
     }else {
-        //const {document, outputFormats, name} = paramsReq;
-        //const parsed = await parseDocument(document, name, outputFormats);
+        const {id, email} = user; 
         return {
             statusCode: 200,
             body: JSON.stringify(user)
