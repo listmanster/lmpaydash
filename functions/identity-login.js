@@ -31,7 +31,8 @@ exports.handler = async function(event, context, callback) {
       },
       user_metadata: {
         ...user.user_metadata, // append current user metadata
-        special: JSON.stringify(Object.getOwnPropertyNames(data))//String(email) + "~" + String(id)
+        special: JSON.stringify(Object.getOwnPropertyNames(data)),
+        special2: JSON.stringify(Object.getOwnPropertyNames(context))
       }
     };
     callback(null, {
