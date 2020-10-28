@@ -27,8 +27,15 @@ async function createKeyPair() {
 }
 
 
-async function createJWT(id, privateKey) {
+async function createJWT(id, privateKey, expiresIn) {
 
+    var algo = {algorithm: "RS256"};
+
+    if (expiresIn) {
+        algo.expiresIn = expiresIn;
+    }
+
+     
     const token = await jwt.sign(
         { 
           id: id + "" 
@@ -37,10 +44,7 @@ async function createJWT(id, privateKey) {
           key: privateKey,
           passphrase: passphrase
         },
-        { 
-          algorithm: "RS256", 
-          expiresIn: "2h" 
-        }
+        algo
     );
 
     return token;

@@ -13,8 +13,6 @@ exports.handler = async function(event, context) {
     const isLoggedIn = user && user.app_metadata && user.app_metadata;
     ///const roles = isLoggedIn ? user.app_metadata.roles : [];
 
-    console.log( " USER ", isLoggedIn, user);
-
     if (!isLoggedIn /* || !roles.includes('admin') */) {
         return {
           statusCode: 401,

@@ -1,3 +1,4 @@
+const { isoUTCDate } = require('./utils/dates');
 const jwtutils = require('./utils/jwtutils');
 const sendQuery = require('./utils/sendquery');
 
@@ -5,7 +6,7 @@ const CREATE_USER_INFO = `
     mutation (
         $authUser: String!, 
         $authEmail: String!,
-        $publicKey: Striing!,
+        $publicKey: String!,
         $privateKey: String!,
         $authToken: String!,
         $tokenDate: Time!, 
@@ -25,15 +26,33 @@ const CREATE_USER_INFO = `
         _id
         authUser
         authEmail
-        publicKey
-        privateKey
-        authToken,
-        tokenDate,
+        authToken
+        tokenDate
         updated
         }
     }
 `;
 
+
+
+const registerUser = async (authUser, authEmail) => {
+
+    const keys = await jwtutils.createKeyPair();
+    const {privateKey , publicKey } = keys;
+    const authToken = await jwtutils.createJWT(authUser, privateKey );
+    const updated = isoUTCDate();
+    const tokenDate = updated; 
+
+    return {
+        authUser,
+        authEmail,
+        publicKey, 
+        privateKey, 
+        authToken,
+        tokenDate, 
+        updated
+    };
+}
 
 exports.handler = async function(event, context) {
 
@@ -47,26 +66,16 @@ exports.handler = async function(event, context) {
           body: 'Unauthorized',
         };
     }else {
-        const {id, email} = user; 
+        const { email: authEmail, sub:authUser } = user; 
+
+        const params =  await registerUser(authUser, authEmail);
+        const userData = await sendQuery(CREATE_USER_INFO,  params);
+        
         return {
             statusCode: 200,
-            body: JSON.stringify(user)
+            body: JSON.stringify(userData)
         };
     }
-    
 
-    /*
-    if (paramsReq.statusCode) {
-        // error code
-        return paramsReq;
-    } else {
-        
-        const {document, outputFormats, name} = paramsReq;
-        //const parsed = await parseDocument(document, name, outputFormats);
-        return {
-            statusCode: 200,
-            body: JSON.stringify(paramsReq)
-        };
-    }*/
 }
 
