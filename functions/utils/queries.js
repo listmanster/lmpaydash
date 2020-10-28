@@ -8,7 +8,7 @@ const GET_USER_INFO =`
             userPlan
             updated
             tokens {
-                datas {
+                data {
                     _id
                     token
                 }
@@ -20,31 +20,24 @@ const GET_USER_INFO =`
 
 
 const ADD_USER_INFO = `
-    mutation (
-        $authUser: String!,
-        $userPlan: String!,
-        $updated: Time!,
-        $tokens: [Token!]!
-
-    ) {
-        createUser(
-            data: {
-                authUser: "user2",
-                userPlan: "trial",
-                updated:"2020-10-11T00:00:00Z",
-                tokens: {
-                    create: $tokens
-                    }
-            }){
-            _id
-            authUser
-            userPlan
-            updated
-            tokens{
-                data{
-                    token
-                }
+    mutation CreateUser($authUser: String!, $userPlan: String!, $updated: Time!, $tokens: [Token!]!) {
+        createUser(data: {
+        authUser: $authUser,
+        userPlan: $userPlan,
+        updated: $updated,
+        tokens: {
+            create: $tokens
+        }
+        }){
+        _id
+        authUser
+        userPlan
+        updated
+        tokens{
+            data{
+             token
             }
+        }
         }
     }
 `;

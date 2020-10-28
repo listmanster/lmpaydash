@@ -1,14 +1,13 @@
-const crypto = require('crypto');
+const crypto = require("crypto");
+var base64url = require('base64url');
+const util = require('util');
 
-const generateToken = async () => {
-    const validChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let array = new Uint8Array(40);
-    crypto.crypto.getRandomValues(array);
-    array = array.map(x => validChars.charCodeAt(x % validChars.length));
-    const randomState = String.fromCharCode.apply(null, array);
-    return randomState + "=";
+const randBytes = util.promisify(crypto.randomBytes);
+
+async function generateToken() {
+  var bytes = await randBytes(48);
+  return base64url(bytes) + "="
 }
-
 
 module.exports = {
     generateToken: generateToken

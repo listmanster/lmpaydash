@@ -1,56 +1,59 @@
+const { generateToken } = require('./utils/crypto');
 const { isoUTCDate } = require('./utils/dates');
-const jwtutils = require('./utils/jwtutils');
+const queries = require("./utils/queries");
 const sendQuery = require('./utils/sendquery');
 
-const CREATE_USER_INFO = `
-    mutation (
-        $authUser: String!, 
-        $authEmail: String!,
-        $publicKey: String!,
-        $privateKey: String!,
-        $authToken: String!,
-        $tokenDate: Time!, 
-        $updated: Time!
-    ) {
-        createUserInfo (
-            data:{ 
-            authUser: $authUser ,
-            authEmail: $authEmail,
-            publicKey: $publicKey, 
-            privateKey: $privateKey, 
-            authToken: $authToken,
-            tokenDate: $tokenDate,
-            updated: $updated
-            }
-        ) {
+const ADD_USER_INFO = queries.ADD_USER_INFO;
+
+/*
+    mutation CreateUser($authuser: String!, $userPlan: String!, $updated: Time!, $tokens: [Token!]!) {
+        createUser(data: {
+        authUser: $authUser,
+        userPlan: $userPlan,
+        updated: $updated,
+        tokens: {
+            create: $tokens
+        }
+        }){
         _id
         authUser
-        authEmail
-        authToken
-        tokenDate
+        userPlan
         updated
+        tokens{
+            data{
+             token
+            }
+        }
         }
     }
-`;
 
 
+       { name:"label 2",
+          token:"user2_tok1",
+          updated:"2020-10-11T00:00:00Z",
+        }    
 
-const registerUser = async (authUser, authEmail) => {
+*/
 
-    const keys = await jwtutils.createKeyPair();
-    const {privateKey , publicKey } = keys;
-    const authToken = await jwtutils.createJWT(authUser, privateKey );
+
+const registerUserParams = async (authUser) => {
+
     const updated = isoUTCDate();
-    const tokenDate = updated; 
+    const userPlan = "trial";
+    const token = await generateToken();
+    const tokens = [
+        {
+            name: "default",
+            token: token,
+            updated: updated
+        }
+    ];
 
     return {
         authUser,
-        authEmail,
-        publicKey, 
-        privateKey, 
-        authToken,
-        tokenDate, 
-        updated
+        userPlan,
+        updated,
+        tokens
     };
 }
 
@@ -66,10 +69,11 @@ exports.handler = async function(event, context) {
           body: 'Unauthorized',
         };
     }else {
-        const { email: authEmail, sub:authUser } = user; 
-
-        const params =  await registerUser(authUser, authEmail);
-        const userData = await sendQuery(CREATE_USER_INFO,  params);
+        const { sub:authUser } = user; 
+        const token = await generateToken();
+        const params =  await registerUserParams(authUser);
+        console.log(" REGISTER_USER_PARAMS = ", params );
+        const userData = await sendQuery(ADD_USER_INFO,  params);
         
         return {
             statusCode: 200,

@@ -76,7 +76,7 @@ const LoggedIn = () => {
     
     const [authUser, setAuthuser] = useState(false);
     const [authEmail, setAuthEmail] = useState(false);
-    const [authToken, setAuthToken] = useState(false);
+    const [authTokens, setAuthTokens] = useState(false);
     const [userRegistered, setUserRegistered] = useState(false);
 
     //const [token, setToken] = useState(false);
@@ -103,10 +103,11 @@ const LoggedIn = () => {
             setAuthuser(userId);
             setAuthEmail(userEmail) ;
             const userInfoData = await fetchUserInfo();
-            const extendedData = userInfoData.data.findUserInfoByAuthUser.data;
+            console.log(" USER INFO DATA == ", userInfoData);
+            const extendedData = userInfoData.data.findUser.data;
             const isUserRegistered = extendedData.length > 0  ; 
             if (isUserRegistered) {
-                setAuthToken(extendedData[0].authToken);
+                setAuthTokens(extendedData[0].tokens);
                 setUserRegistered(true);
             } else {
                 console.log(" USER NOT REGISTERED ! ");
@@ -117,13 +118,13 @@ const LoggedIn = () => {
         
         fetchUserData();
 
-    }, [authToken]);
+    }, [authTokens]);
     
 
     return (
         <section className="bg-white border-b py-8">
             <div className="container mx-auto flex flex-wrap pt-4 pb-12">
-                <ServiceInfoBox authToken={authToken} />
+              
             
      {/*        <DashboardBox title="Service Information" subTitle="Access Token" >
             {!authToken ? 
