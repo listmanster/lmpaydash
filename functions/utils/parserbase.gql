@@ -1,15 +1,84 @@
-type UserInfo {
+
+type Token {
+    name: String!
+    token: String! @unique
+    updated: Time!
+    owner: User!
+}
+
+type User {
     authUser: String! @unique
-    authEmail: String!
-    authToken: String
-    privateKey: String
-    publicKey: String
-    tokenDate: Time!
+    userPlan: String!
+    tokens: [Token!] @relation
     updated: Time!
 }
 
-
 type Query {
-    allUsers: [UserInfo!]!
-    findUserInfoByAuthUser (authUser: String!): [UserInfo!]!
+    allUsers: [User!]!
+    findToken (token: String!): [Token!]!
+    findUser (authUser: String!): [User]!
 }
+
+"""
+mutation {
+  createUser(data: {
+    authUser: "user2",
+    userPlan: "trial",
+    updated:"2020-10-11T00:00:00Z",
+    tokens: {
+      create: [
+      	{
+          name:"label 2",
+          token:"user2_tok1",
+          updated:"2020-10-11T00:00:00Z",
+        }
+      ]
+    }
+  }){
+    _id
+    authUser
+    userPlan
+    updated
+    tokens{
+      data{
+        token
+      }
+    }
+  }
+}
+
+mutation {
+  createUser(data: {
+    authUser: "user3",
+    userPlan: "trial",
+    updated:"2020-10-11T00:00:00Z",
+  }){
+    _id
+    authUser
+    userPlan
+    updated
+  }
+}
+
+
+
+
+query {
+  allUsers {
+    data {
+      _id
+      authUser
+      userPlan
+      updated
+      tokens{
+        data {
+          _id
+          token
+          name
+          updated
+        }
+      }
+    }
+  }
+}
+"""

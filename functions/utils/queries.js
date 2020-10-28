@@ -1,14 +1,18 @@
 
 const GET_USER_INFO =`
-    query findUserInfo ($authUser: String!) {
-        findUserInfoByAuthUser(authUser: $authUser) {
+    query FindUser ($authUser: String!) {
+        findUser(authUser: $authUser) {
         data {
+            _id
             authUser
-            authToken
-            authEmail
+            userPlan
             updated
-            tokenDate
-            publicKey
+            tokens {
+                datas {
+                    _id
+                    token
+                }
+            }
         }
     }
   }`
@@ -17,33 +21,30 @@ const GET_USER_INFO =`
 
 const ADD_USER_INFO = `
     mutation (
-        $authUser: String!, 
-        $authEmail: String!,
-        $publicKey: Striing!,
-        $privateKey: String!,
-        $authToken: String!,
-        $tokenDate: Time!, 
-        $updated: Time!
+        $authUser: String!,
+        $userPlan: String!,
+        $updated: Time!,
+        $tokens: [Token!]!
+
     ) {
-        createUserInfo (
-            data:{ 
-            authUser: $authUser ,
-            authEmail: $authEmail,
-            publicKey: $publicKey, 
-            privateKey: $privateKey, 
-            authToken: $authToken,
-            tokenDate: $tokenDate,
-            updated: $updated
+        createUser(
+            data: {
+                authUser: "user2",
+                userPlan: "trial",
+                updated:"2020-10-11T00:00:00Z",
+                tokens: {
+                    create: $tokens
+                    }
+            }){
+            _id
+            authUser
+            userPlan
+            updated
+            tokens{
+                data{
+                    token
+                }
             }
-        ) {
-        _id
-        authUser
-        authEmail
-        publicKey
-        privateKey
-        authToken,
-        tokenDate,
-        updated
         }
     }
 `;
