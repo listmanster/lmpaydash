@@ -11,6 +11,8 @@ const GET_USER_INFO =`
                 data {
                     _id
                     token
+                    name
+                    updated
                 }
             }
         }
@@ -20,7 +22,7 @@ const GET_USER_INFO =`
 
 
 const ADD_USER_INFO = `
-    mutation CreateUser($authUser: String!, $userPlan: String!, $updated: Time!, $tokens: [Token!]!) {
+    mutation CreateUser($authUser: String!, $userPlan: String!, $updated: Time!, $tokens: [TokenInput]!) {
         createUser(data: {
         authUser: $authUser,
         userPlan: $userPlan,
@@ -35,9 +37,21 @@ const ADD_USER_INFO = `
         updated
         tokens{
             data{
+             _id
              token
+             name
+             updated
             }
         }
+        }
+    }
+`;
+
+
+const DELETE_TOKEN = `
+    mutation DeleteToken($id: ID!) {
+        deleteToken(id: $id) {
+        _id
         }
     }
 `;
@@ -46,5 +60,6 @@ const ADD_USER_INFO = `
 
 module.exports = {
     GET_USER_INFO: GET_USER_INFO,
-    ADD_USER_INFO: ADD_USER_INFO
+    ADD_USER_INFO: ADD_USER_INFO,
+    DELETE_TOKEN: DELETE_TOKEN
 };

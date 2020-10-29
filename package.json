@@ -27,6 +27,7 @@
     "react-copy-to-clipboard": "^5.0.2",
     "react-dom": "^16.14.0",
     "react-helmet": "^6.1.0",
+    "react-loadingmask": "^4.0.6",
     "react-netlify-identity": "^0.2.5",
     "react-toastify": "^6.0.9"
   },
